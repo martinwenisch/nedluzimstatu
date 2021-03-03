@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'static_content/**'
+#     paths:
+#       - 'static_content/**'
 env:
   bucketName: ${{ secrets.AWS_STATIC_CONTENT_BUCKET_NAME }}
-  cloudFrontDeploymentId: ${{ secrets.AWS_CLOUDFRONT_DEPLOYMENT_ID }}
+#   cloudFrontDeploymentId: ${{ secrets.AWS_CLOUDFRONT_DEPLOYMENT_ID }}
 jobs:
   deploy:
     runs-on: ubuntu-18.04
@@ -18,7 +18,6 @@ jobs:
         run: |
           cp -a ../public/psc2ovm .
           aws s3 sync --acl public-read --delete . s3://${{ env.bucketName }}
-          aws cloudfront create-invalidation --distribution-id ${{ env.cloudFrontDeploymentId }} --paths "/*"
         working-directory: 'static_content'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
